@@ -62,6 +62,8 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% ================ FORWARD PROPAGATION ================ %
+
 % Hypothesis function for first layer
 a1 = [ones(m,1), X]; 
 z2 = a1*Theta1';
@@ -79,6 +81,8 @@ for i = 1:length(y)
   y_matrix(i,label) = 1;
 endfor
 
+% ================ COST FUNCTION ================ %
+
 %Compute cost for each label k
 J_labels = zeros(1, num_labels);
 for k = 1:num_labels
@@ -88,7 +92,6 @@ endfor
 
 %Sum label costs to get total unregularized cost
 J = sum(J_labels);
-
 
 %Compute cost for regularization terms
 Theta1_reg = Theta1;
@@ -102,19 +105,20 @@ Jreg = lambda/(2*m)*(sum(sum(Theta1_reg.^2)) + sum(sum(Theta2_reg.^2)));
 %Add regularization term to get total regularized cost
 J = J + Jreg;
 
-%% Back Propagation %%
+% ================ Back Propagation ================ %
 
 %Compute little delta terms
 delta3 = h - y_matrix;
-delta2 = delta3*Theta2(:, 2:end).*sigmoidGradient(z2);
-delta2(:,1) = [];                             %remove first column
+delta2 = delta3*Theta2_reg.*sigmoidGradient(z2);
+%delta2(:,1) = [];       %remove first column
 
+%Unregularized gradient
 Theta1_grad = (1/m)*(Theta1_grad + delta2'*a1);
 Theta2_grad = (1/m)*(Theta2_grad + delta3'*a2);
 
-% -------------------------------------------------------------
-
-% =========================================================================
+%Regularized gradient
+Theta1_grad = Theta1_grad + (lambda/m)*Theta1_reg;
+Theta2_grad = Theta2_grad + (lambda/m)*Theta2_reg;
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
