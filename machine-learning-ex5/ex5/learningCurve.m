@@ -53,7 +53,24 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
+%Column vector of size m
+mSample = [1:m];
 
+for i = 1:m
+
+%Obtain subset of training examples
+Xtrain = X(1:i,:);
+ytrain = y(1:i,:);
+
+linearRegCostFunction(
+
+error_train = 1/(2*m)*sum((h-y).^2);
+
+hval = Xval*theta;
+error_val = 1/(2*m)*sum((h-y).^2);
+  
+
+endfor
 
 
 
