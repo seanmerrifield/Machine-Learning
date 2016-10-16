@@ -53,21 +53,24 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
-%Column vector of size m
-mSample = [1:m];
 
 for i = 1:m
 
 %Obtain subset of training examples
 Xtrain = X(1:i,:);
-ytrain = y(1:i,:);
+ytrain = y(1:i);
+lambdaTrain = 0;
 
-linearRegCostFunction(
 
-error_train = 1/(2*m)*sum((h-y).^2);
+%Train based on training subset
+[theta] = trainLinearReg(Xtrain, ytrain, lambda);
 
-hval = Xval*theta;
-error_val = 1/(2*m)*sum((h-y).^2);
+%Calculate training set cost
+error_train(i) = linearRegCostFunction(Xtrain, ytrain, theta, lambdaTrain);
+
+%Calculate cost on validation set
+error_val(i) = linearRegCostFunction(Xval, yval, theta, lambdaTrain);
+
   
 
 endfor
